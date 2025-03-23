@@ -1,0 +1,17 @@
+[project]
+name            = 'kirby-cli'
+version         = '0.1.0'
+requires-python = '>=3.12,<3.13'
+dependencies    = [
+    'kirby'
+]
+
+[tool.uv.sources]
+kirby = { path = '..' }
+
+[tool.uv]
+package = false
+
+[build-system]
+requires      = ['hatchling']
+build-backend = 'hatchling.build'
