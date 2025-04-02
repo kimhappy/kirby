@@ -1,0 +1,9 @@
+.DS_Store
+.vscode/
+.cursor/
+__pycache__/
+uv.lock
+.venv/
+*.toml
+!pyproject.toml
+*.wav
