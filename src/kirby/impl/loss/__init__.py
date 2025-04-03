@@ -1,10 +1,10 @@
 from typing import Type
 import torch
 
-from ...protocol.config._item_config import _ItemConfig
-from ...protocol.impl.loss_base      import LossBase
-from .  dc                           import DC
-from .  esr                          import ESR
+from .  dc                            import DC
+from .  esr                           import ESR
+from ...protocol._config._item_config import _ItemConfig
+from ...protocol.impl   .loss_base    import LossBase
 
 class Mix(
     LossBase,
@@ -48,8 +48,3 @@ def _find_loss(name: str) -> Type[LossBase]:
             return loss
 
     raise ValueError(f'{ name } not found')
-
-__all__ = [
-    'register_loss',
-    '_find_loss'
-]

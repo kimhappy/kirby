@@ -5,9 +5,9 @@ from copy   import deepcopy
 import box
 import torch
 
-from .protocol.config._config import _Config
-from .impl                    import _find_model, _find_loss, _find_optimizer, _find_scheduler, _find_trainer
-from .util                    import _set_seed, _set_deterministic, Result
+from .protocol._config._config import _Config
+from .impl                     import _find_model, _find_loss, _find_optimizer, _find_scheduler, _find_trainer
+from ._util                    import _set_seed, _set_deterministic, Result
 
 class Train:
     def __init__(

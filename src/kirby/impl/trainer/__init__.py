@@ -1,7 +1,7 @@
 from typing import Type
 
-from ...protocol.impl.trainer_base import TrainerBase
 from .  rnn                        import RNN
+from ...protocol.impl.trainer_base import TrainerBase
 
 _TRAINERS = [
     RNN
@@ -16,8 +16,3 @@ def _find_trainer(name: str) -> Type[TrainerBase]:
             return trainer
 
     raise ValueError(f'{ name } not found')
-
-__all__ = [
-    'register_trainer',
-    '_find_trainer'
-]

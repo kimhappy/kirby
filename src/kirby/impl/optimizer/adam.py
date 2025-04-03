@@ -1,7 +1,7 @@
 import torch
 
-from ...protocol.config._item_config   import _ItemConfig
-from ...protocol.impl  .optimizer_base import OptimizerBase
+from ...protocol._config._item_config   import _ItemConfig
+from ...protocol.impl   .optimizer_base import OptimizerBase
 
 class Adam(
     OptimizerBase,

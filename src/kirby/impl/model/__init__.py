@@ -1,7 +1,7 @@
 from typing import Type
 
-from ...protocol.impl.model_base import ModelBase
 from .  lstm                     import LSTM
+from ...protocol.impl.model_base import ModelBase
 
 _MODELS = [
     LSTM
@@ -16,8 +16,3 @@ def _find_model(name: str) -> Type[ModelBase]:
             return model
 
     raise ValueError(f'{ name } not found')
-
-__all__ = [
-    'register_model',
-    '_find_model'
-]

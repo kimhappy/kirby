@@ -1,8 +1,8 @@
 import torch
 
-from ...protocol.config._general_config import _GeneralConfig
-from ...protocol.config._item_config    import _ItemConfig
-from ...protocol.impl  .model_base      import ModelBase
+from ...protocol._config._general_config import _GeneralConfig
+from ...protocol._config._item_config    import _ItemConfig
+from ...protocol.impl   .model_base      import ModelBase
 
 class LSTM(
     ModelBase,

@@ -1,7 +1,7 @@
 import torch
 
-from ...protocol.config._item_config import _ItemConfig
-from ...protocol.impl.loss_base      import LossBase
+from ...protocol._config._item_config import _ItemConfig
+from ...protocol.impl   .loss_base    import LossBase
 
 class ESR(
     LossBase,

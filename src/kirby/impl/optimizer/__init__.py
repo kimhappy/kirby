@@ -1,7 +1,7 @@
 from typing import Type
 
-from ...protocol.impl.optimizer_base import OptimizerBase
 from .  adam                         import Adam
+from ...protocol.impl.optimizer_base import OptimizerBase
 
 _OPTIMIZERS = [
     Adam
@@ -16,8 +16,3 @@ def _find_optimizer(name: str) -> Type[OptimizerBase]:
             return optimizer
 
     raise ValueError(f'{ name } not found')
-
-__all__ = [
-    'register_optimizer',
-    '_find_optimizer'
-]

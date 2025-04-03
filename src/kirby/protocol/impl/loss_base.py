@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 import torch
 
-from .. config._item_config import _ItemConfig
-from ...util  ._meta        import _InheritCheck
+from .. _config._item_config import _ItemConfig
+from ..._util  ._meta        import _InheritCheck
 
 class LossBase(
     ABC                          ,
