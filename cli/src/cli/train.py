@@ -63,12 +63,14 @@ def main():
         os.makedirs(CACHE_PATH)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type = str, required = True, help = 'Path to config TOML file')
+    parser.add_argument('-c', '--config', type   = str, required = True, help = 'Path to config TOML file'                 )
+    parser.add_argument('-f', '--force',  action = 'store_true'        , help = 'Force run even if training already exists')
     args   = parser.parse_args()
 
     with open(args.config, 'r') as f:
         config = toml.load(f)
 
+    resume  = 'allow' if args.force else 'never'
     config  = _set_default     (config )
     config  = _load_data       (config )
     pconfig = _save_audio_cache(config )
@@ -77,7 +79,13 @@ def main():
     config_path = os.path.join(CACHE_PATH, f'{ id }_config.toml')
     dict_path   = os.path.join(CACHE_PATH, f'{ id }_dict.pth'   )
 
-    wandb_run = wandb.init(entity = ENTITY, project = PROJECT, config = pconfig, id = id)
+    wandb_run = wandb.init(
+        entity  = ENTITY ,
+        project = PROJECT,
+        config  = pconfig,
+        id      = id     ,
+        resume  = resume
+    )
 
     if os.path.exists(dict_path):
         print(f'Training already exists for <{ id }>')

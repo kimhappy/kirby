@@ -14,10 +14,7 @@ See [the Development Guide](docs/DEVELOPMENT.md).
 ## TODO
 - [ ] CLI document
 - [ ] Configuration document
-- [ ] Optional wandb (`-w`)
-- [ ] Check if id already exists from wandb (not from local)
-- [ ] Upload / Download datas using wandb
-- [ ] Force run option (`-f`)
+- [ ] Upload / Download datas using WandB Artifact
 - [ ] Inference library code
 - [ ] Inference CLI code
 
