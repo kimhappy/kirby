@@ -1,5 +1,4 @@
 from typing import List
-import time
 import torch
 
 from ...protocol.config._general_config import _GeneralConfig
@@ -71,8 +70,6 @@ class RNN(TrainerBase):
     def train(self) -> Result:
         self.model.train()
 
-        begin_time = time.time()
-
         # Prepare shuffle
         num_chunks     = self.tis.shape[ 0 ]
         num_chunks_cut = num_chunks - (num_chunks % self.batch_size)
@@ -112,13 +109,10 @@ class RNN(TrainerBase):
             num_iter  = (input_batch.shape[ 1 ] - self.train_init_frame) // self.train_frame
             ep_loss  += batch_loss / num_iter
 
-        end_time = time.time()
-        return Result('train', (ep_loss / shuffle.shape[ 0 ]).item(), end_time - begin_time)
+        return Result('training loss', (ep_loss / shuffle.shape[ 0 ]).item())
 
     def validate(self) -> Result:
         self.model.eval()
-
-        begin_time = time.time()
 
         with torch.no_grad():
             # Prepare output
@@ -149,6 +143,5 @@ class RNN(TrainerBase):
             loss = self.vali_loss(output, self.vos)
 
         self.scheduler.step(loss)
-        end_time = time.time()
 
-        return Result('validate', loss.item(), end_time - begin_time)
+        return Result('validation loss', loss.item())

@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Callable, Tuple
 from copy   import deepcopy
 import box
-import time
 import torch
 
 from .protocol.config._config import _Config
@@ -67,11 +66,13 @@ class Train:
         best_vali_loss   = 1e12
         best_dict        = None
         patience_counter = 0
-        begin            = time.time()
 
         for epoch in range(1, self.max_epochs + 1):
             tr = self.trainer.train()
+            lr = self.trainer.optimizer.param_groups[ 0 ][ 'lr' ]
+
             callback(epoch, tr)
+            callback(epoch, Result('learning rate', lr))
 
             if epoch % self.vali_cycle != 0:
                 continue
@@ -79,10 +80,10 @@ class Train:
             vr = self.trainer.validate()
             callback(epoch, vr)
 
-            if vr.loss < best_vali_loss:
+            if vr.value < best_vali_loss:
                 patience_counter = 0
                 best_dict        = deepcopy(self.trainer.model.state_dict())
-                best_vali_loss   = vr.loss
+                best_vali_loss   = vr.value
                 continue
 
             patience_counter += 1
@@ -90,5 +91,4 @@ class Train:
             if patience_counter > self.early_stop:
                 break
 
-        end = time.time()
-        return best_dict, Result('final', best_vali_loss, end - begin)
+        return best_dict, Result('best validation loss', best_vali_loss)
