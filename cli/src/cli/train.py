@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 import wandb
 import kirby
 
-from .util import _best_device_name, _read_mono_f32, _write_mono_f32, _recursive_hash
+from .util import _best_device_name, _read_mono_f32, _write_mono_f32, _power_hash
 
 def _set_default(config: dict) -> dict:
     new_config = deepcopy(config)
@@ -41,7 +41,7 @@ def _save_audio_cache(config: dict) -> dict:
     for data_field in ['train_data', 'vali_data']:
         for data in new_config[ data_field ]:
             for field in ['input', 'output']:
-                hash = _recursive_hash(data[ field ])
+                hash = _power_hash(data[ field ])
                 path = os.path.join(CACHE_PATH, f'{ hash }.wav')
 
                 if not os.path.exists(path):
@@ -74,7 +74,7 @@ def main():
     config  = _set_default     (config )
     config  = _load_data       (config )
     pconfig = _save_audio_cache(config )
-    id      = _recursive_hash  (pconfig)
+    id      = _power_hash  (pconfig)
 
     config_path = os.path.join(CACHE_PATH, f'{ id }_config.toml')
     dict_path   = os.path.join(CACHE_PATH, f'{ id }_dict.pth'   )
@@ -84,8 +84,7 @@ def main():
         project = PROJECT,
         config  = pconfig,
         id      = id     ,
-        resume  = resume
-    )
+        resume  = resume)
 
     if os.path.exists(dict_path):
         print(f'Training already exists for <{ id }>')
@@ -104,7 +103,6 @@ def main():
             toml.dump(pconfig, f)
 
         torch.save(best_dict, dict_path)
-        wandb.save(dict_path)
 
         print(f'Best validation loss: { result.value }')
 

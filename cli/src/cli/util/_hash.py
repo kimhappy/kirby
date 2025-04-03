@@ -1,30 +1,45 @@
-from typing import Any
+from typing import Any, Optional
 import hashlib
-import json
+import struct
 import numpy as np
 
-def _recursive_hash(obj: Any) -> str:
-    def _hash_dict(d: dict) -> str:
-        sorted_dict = json.dumps(d, sort_keys = True)
-        dict_hash   = hashlib.sha256(sorted_dict.encode()).hexdigest()
-
-        for key, value in d.items():
-            if isinstance(value, (dict, list)):
-                nested_hash = _recursive_hash(value)
-                dict_hash   = hashlib.sha256((dict_hash + nested_hash).encode()).hexdigest()
-
-        return dict_hash
+def _power_hash(obj: Any) -> Optional[str]:
+    m = hashlib.sha256()
 
     if isinstance(obj, dict):
-        return _hash_dict(obj)
-    elif isinstance(obj, list) or isinstance(obj, tuple):
-        return hashlib.sha256(''.join(str(_recursive_hash(item)) for item in obj).encode()).hexdigest()
-    else:
-        if isinstance(obj, str):
-            obj = obj.encode()
-        elif isinstance(obj, np.ndarray):
-            obj = obj.tobytes()
-        else:
-            raise ValueError(f'{ type(obj) } not supported')
+        def _valid_item(item: Any) -> bool:
+            return (
+                item[ 0 ] is not None and
+                item[ 1 ] is not None and (
+                    not isinstance(item[ 0 ], str) or
+                    not item[ 0 ].startswith('_')))
 
-        return hashlib.sha256(obj).hexdigest()
+        m.update('dict'.encode())
+        obj = sorted(filter(_valid_item, obj.items()))
+    elif isinstance(obj, int):
+        m.update('int'.encode())
+        obj = struct.pack('>q', obj)
+    elif isinstance(obj, float):
+        m.update('float'.encode())
+        obj = struct.pack('>d', obj)
+    elif isinstance(obj, bool):
+        m.update('bool'.encode())
+        obj = struct.pack('>B', int(obj))
+    elif isinstance(obj, str):
+        m.update('str'.encode())
+        obj = obj.encode()
+    elif isinstance(obj, np.ndarray):
+        m.update('ndarray'.encode())
+        obj = obj.tobytes()
+
+    if isinstance(obj, (bytes, bytearray)):
+        m.update(obj)
+    elif isinstance(obj, (list, tuple)):
+        m.update('list'.encode())
+
+        for item in obj:
+            m.update(_power_hash(item).encode())
+    else:
+        return None
+
+    return m.hexdigest()
