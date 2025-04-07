@@ -51,18 +51,18 @@ class RNN(TrainerBase):
         self.vos       = torch.empty(0                                   ).to(self.device)
 
         for data in train_data:
-            num_chunks = data.input.shape[ 0 ] // self.chunk_len
-            len_cut    = num_chunks            *  self.chunk_len
+            num_chunks = data.input_audio.shape[ 0 ] // self.chunk_len
+            len_cut    = num_chunks                  *  self.chunk_len
 
-            input  = torch.from_numpy(_merge_cond(data.input , data.cond)[ :len_cut ].reshape(num_chunks, self.chunk_len, -1)).to(self.device)
-            output = torch.from_numpy(            data.output            [ :len_cut ].reshape(num_chunks, self.chunk_len    )).to(self.device)
+            input  = torch.from_numpy(_merge_cond(data.input_audio , data.cond)[ :len_cut ].reshape(num_chunks, self.chunk_len, -1)).to(self.device)
+            output = torch.from_numpy(            data.output_audio            [ :len_cut ].reshape(num_chunks, self.chunk_len    )).to(self.device)
 
             self.tis = torch.cat((self.tis, input ))
             self.tos = torch.cat((self.tos, output))
 
         for data in vali_data:
-            input  = torch.from_numpy(_merge_cond(data.input , data.cond)).to(self.device)
-            output = torch.from_numpy(            data.output            ).to(self.device)
+            input  = torch.from_numpy(_merge_cond(data.input_audio , data.cond)).to(self.device)
+            output = torch.from_numpy(            data.output_audio            ).to(self.device)
 
             self.vis = torch.cat((self.vis, input ))
             self.vos = torch.cat((self.vos, output))

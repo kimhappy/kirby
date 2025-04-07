@@ -15,8 +15,9 @@ dependencies    = [
 kirby = { path = '..' }
 
 [project.scripts]
-train     = 'cli:train'
-inference = 'cli:inference'
+train      = 'cli:train'
+inference  = 'cli:inference'
+initialize = 'cli:initialize'
 
 [build-system]
 requires      = ['hatchling']

@@ -6,6 +6,3 @@ uv.lock
 .venv/
 *.toml
 !pyproject.toml
-*.wav
-wandb/
-.env
