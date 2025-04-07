@@ -14,4 +14,4 @@ from .protocol import \
     Result
 
 from .train     import train
-from .inference import Inference
+from .inference import inference
