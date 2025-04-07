@@ -1,22 +1,18 @@
 # Kirby
-Library for black-box modeling of complex non-linear audio system.
+A library for black-box modeling of complex non-linear audio systems.
 
-## Prerequisite
+## Prerequisites
 - [UV](https://github.com/astral-sh/uv)
-- [WandB](https://wandb.ai) account (Optional)
+- [WandB](https://wandb.ai) account
 
-## How to use CLI
+## CLI Usage
 See [the CLI Guide](docs/CLI.md).
 
 ## Development
 See [the Development Guide](docs/DEVELOPMENT.md).
 
 ## TODO
-- [ ] CLI document
-- [ ] Configuration document
-- [ ] Upload / Download datas using WandB Artifact
-- [ ] Inference library code
-- [ ] Inference CLI code
+See [the TODO List](docs/TODO.md).
 
 ## Contributors
 - [kimhappy](https://github.com/kimhappy)

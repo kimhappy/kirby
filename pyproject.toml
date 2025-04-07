@@ -1,7 +1,7 @@
 [project]
 name            = 'kirby'
 version         = '0.1.0'
-description     = 'Library for black-box modeling of complex non-linear audio system'
+description     = 'A library for black-box modeling of complex non-linear audio systems'
 authors         = [
     { name = 'Hwanhee Kim'  , email = 'kimhappy@hanyang.ac.kr'     },
     { name = 'Hyunchan Chun', email = 'hyunchan0408@hanyang.ac.kr' }
