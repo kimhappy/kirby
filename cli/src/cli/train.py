@@ -38,7 +38,7 @@ def main() -> int:
     # W&B run for audio files
     entity          = os.getenv('ENTITY' )
     project         = os.getenv('PROJECT')
-    files_to_delete = []
+    files_to_delete = set()
 
     # audio path -> audio id
     def _id_maker(key: str, value: Any) -> Optional[str]:
@@ -48,7 +48,7 @@ def main() -> int:
             id      = _power_hash(samples)
             _write_mono_f32(f'{ id }.wav', samples, sample_rate)
             au_art.add_file(f'{ id }.wav')
-            files_to_delete.append(f'{ id }.wav')
+            files_to_delete.add(f'{ id }.wav')
             return id
 
         return value
@@ -60,7 +60,7 @@ def main() -> int:
             entry   = ad_art.get_entry(f'{ value }.wav')
             path    = entry.download()
             samples = _read_mono_f32(path, sample_rate)
-            files_to_delete.append(path)
+            files_to_delete.add(path)
             return samples
 
         return value
