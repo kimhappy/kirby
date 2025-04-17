@@ -11,4 +11,5 @@ uv.lock
 *.yaml
 *.yml
 *.wav
+*.pt
 !pyproject.toml
