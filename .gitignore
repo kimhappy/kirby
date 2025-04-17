@@ -1,0 +1,14 @@
+.DS_Store
+.vscode/
+.cursor/
+__pycache__/
+.venv/
+wandb/
+uv.lock
+.env
+*.toml
+*.json
+*.yaml
+*.yml
+*.wav
+!pyproject.toml
