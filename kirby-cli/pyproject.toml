@@ -1,0 +1,32 @@
+[project]
+name            = 'kirby-cli'
+version         = '0.1.0'
+authors         = [
+    { name = 'Hwanhee Kim'  , email = 'kimhappy@hanyang.ac.kr'     },
+    { name = 'Hyunchan Chun', email = 'hyunchan0408@hanyang.ac.kr' }
+]
+license         = 'MIT'
+readme          = 'README.md'
+requires-python = '>=3.9,<3.10'
+dependencies    = [
+    'toml>=0.10.2'        ,
+    'torch>=2.6.0'        ,
+    'librosa>=0.11.0'     ,
+    'scipy>=1.13.1'       ,
+    'wandb>=0.19.9'       ,
+    'python-dotenv>=1.1.0',
+    'pyyaml>=6.0.2'       ,
+    'kirby-core'
+]
+
+[tool.uv.sources]
+kirby-core = { path = '../kirby-core' }
+
+[project.scripts]
+training   = 'kirby_cli:training'
+inference  = 'kirby_cli:inference'
+initialize = 'kirby_cli:initialize'
+
+[build-system]
+requires      = ['hatchling']
+build-backend = 'hatchling.build'
