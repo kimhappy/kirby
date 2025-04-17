@@ -59,7 +59,7 @@ def main() -> int:
     parser.add_argument('-c', '--config', type   = str         , help = 'Path to config file (.json / .toml / .yaml / .yml)')
     parser.add_argument('-f', '--force' , action = 'store_true', help = 'Force run even if training already exists'         )
     args       = parser.parse_args()
-    args.force = 'allow' if args.force else None
+    args.force = 'allow' if args.force else 'never'
 
     # W&B run for audio files
     entity  = os.getenv('ENTITY' )
@@ -148,12 +148,16 @@ def main() -> int:
     print(f'RUN ID : { run_id  }')
     print('*************** TRAINING INFO END ****************')
 
-    run = wandb.init(
-        entity  = entity   ,
-        project = project  ,
-        config  = id_config,
-        id      = run_id   ,
-        resume  = args.force)
+    try:
+        run = wandb.init(
+            entity  = entity   ,
+            project = project  ,
+            config  = id_config,
+            id      = run_id   ,
+            resume  = args.force)
+    except wandb.errors.errors.UsageError:
+        print('ERROR: RUN ID ALREADY EXISTS. IF YOU WANT TO FORCE TRAINING, USE --force OPTION')
+        return 1
 
     def _callback(epoch: int, result: kirby_core.Result):
         print(f'EPOCH { epoch }: { result.type } = { result.value }')
