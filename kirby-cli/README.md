@@ -25,6 +25,8 @@ uv run initialize
 
 ### *training config file* 만들기
 Training을 위해서는 *training config file* 을 만들어야 합니다. *training config file* 의 예시는 다음과 같습니다:
+> `<파일명>.json` 으로 저장하세요.
+
 ```json
 {
   "general": {
