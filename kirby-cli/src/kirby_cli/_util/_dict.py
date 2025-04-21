@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Optional, Tuple
 import toml
 import json
 import yaml
@@ -37,15 +37,16 @@ def _write_dict(
 
 def _set_default_value(
     to     : dict,
-    default: dict) -> dict:
-    new_to = deepcopy(to)
+    default: dict) -> Tuple[dict, dict]:
+    new_to   = deepcopy(to)
+    inserted = {}
 
     for key, value in default.items():
         if key not in new_to:
-            new_to[ key ] = value
-            print(f'\'{key}\': {repr(value)}')
+            new_to  [ key ] = value
+            inserted[ key ] = value
 
-    return new_to
+    return new_to, inserted
 
 def _rmap(
     to: Any,

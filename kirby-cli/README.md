@@ -139,6 +139,7 @@ uv run training -c <training config file path>
 ```
 
 정상적으로 실행되었다면, 다음의 내용들이 출력됩니다.
+- 작성하지 않은 필드에 대한 기본값
 - *training config file* 에 명시된 로컬 오디오 파일의 *audio ID*
   - 해당 파일을 *f32* 포맷으로 읽은 샘플 값에 기반한 해쉬 값입니다.
   - 처음 사용하는 파일이라면, 해당 파일이 W&B에 업로드됩니다.
@@ -152,14 +153,8 @@ uv run training -c <training config file path>
 
 > 같은 training ID로는 한 번만 학습할 수 있습니다. 다시 학습하려면 `-f` 옵션을 추가하거나, `seed` 값을 변경하세요.
 
-### 확인하기
-- `https://wandb.ai/<ENTITY>/<PROJECT>` 에서 지금까지 실행된 *training ID* 들을 확인할 수 있습니다.
-- `https://wandb.ai/<ENTITY>/<PROJECT>/runs/<training ID>` 에서 Loss 및 Learning Rate 변화를 추적할 수 있습니다.
-- `https://wandb.ai/<ENTITY>/<PROJECT>/artifacts/dataset/audio/latest/files` 에서 등록된 *audio ID* 및 파일을 확인할 수 있습니다.
-- `https://wandb.ai/<ENTITY>/<PROJECT>/artifacts/dataset/state_dict/latest/files` 에서 학습 결과 (*.pt* 형식) 를 확인할 수 있습니다.
-
 ## 개발 가이드
-### 의존성 추가
+### 의존성 추가하기
 `kirby-cli` 디렉토리에서 다음의 명령을 실행합니다.
 ```sh
 uv add <dependency name>
