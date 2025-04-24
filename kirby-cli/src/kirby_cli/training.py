@@ -9,10 +9,10 @@ import wandb
 import atexit
 import signal
 import warnings
-from rich.columns import Columns
-from rich.console import Console
-from rich.table import Table
-from rich.progress import Progress, BarColumn, TextColumn
+from rich.columns  import Columns
+from rich.console  import Console
+from rich.table    import Table
+from rich.progress import Progress, BarColumn, TextColumn, SpinnerColumn
 import kirby_core
 from ._util import      \
     _read_mono_f32    , \
@@ -114,7 +114,7 @@ def main() -> int:
     config[ 'general' ], inserted = _set_default_value(config[ 'general' ], GENERAL_DEFAULTS)
 
     if inserted:
-        inserted_table = Table('Key', 'Value', title = 'Inserted', width = TABLE_WIDTH)
+        inserted_table = Table('Key', 'Value', title = 'Default values', width = TABLE_WIDTH)
 
         for key, value in inserted.items():
             inserted_table.add_row(key, repr(value))
@@ -141,7 +141,7 @@ def main() -> int:
         au_run.finish()
 
     if replaced:
-        replaced_table = Table('File path', 'Audio ID', title = 'Replaced', width = TABLE_WIDTH)
+        replaced_table = Table('File path', 'Audio ID', title = 'Audio IDs', width = TABLE_WIDTH)
 
         for key, value in replaced.items():
             replaced_table.add_row(key, value)
@@ -171,7 +171,7 @@ def main() -> int:
     run_id     = _power_hash(id_config)
     max_epochs = config[ 'train' ][ 'max_epochs' ]
 
-    run_info_table = Table('Info'       , 'URL', title = 'Run Info')
+    run_info_table = Table('Information', 'URL', title = 'Run Information')
     run_info_table.add_row('Project'    , f'https://wandb.ai/{entity}/{project}')
     run_info_table.add_row('Audio files', f'https://wandb.ai/{entity}/{project}/artifacts/dataset/audio/latest/files')
     run_info_table.add_row('State dicts', f'https://wandb.ai/{entity}/{project}/artifacts/dataset/state_dict/latest/files')
@@ -189,28 +189,43 @@ def main() -> int:
         console.print('Error: Run ID already exists. If you want to force training, use the --force option.')
         return 1
 
-    best_val_loss = float('inf')
-    best_column   = TextColumn(f'Best: {best_val_loss:.4f}')
+    prev_train_loss = float('inf')
+    prev_val_loss   = float('inf')
+    prev_column     = TextColumn('')
+
+    def _update_prev_column():
+        nonlocal prev_train_loss, prev_val_loss, prev_column
+        prev_column.text_format = ''
+
+        if prev_train_loss < float('inf'):
+            prev_column.text_format += f'T Loss: {prev_train_loss:.4f}'
+
+            if prev_val_loss < float('inf'):
+                prev_column.text_format += ' | '
+
+        if prev_val_loss < float('inf'):
+            prev_column.text_format += f'V Loss: {prev_val_loss:.4f}'
 
     with Progress(
-        TextColumn('{task.description}'),
-        BarColumn (),
-        TextColumn('{task.completed} / {task.total}'),
-        best_column) as progress:
+        TextColumn   ('{task.description}'),
+        BarColumn    (),
+        TextColumn   ('{task.completed} / {task.total}'),
+        SpinnerColumn(),
+        prev_column) as progress:
         training_task = progress.add_task('Training...', total = max_epochs)
 
         def _callback(epoch: int, result: kirby_core.Result):
-            nonlocal best_val_loss, best_column
-
+            nonlocal prev_train_loss, prev_val_loss, prev_column
             run.log({ result.type: result.value })
 
             if result.type == 'training loss':
-                progress.update(training_task, advance = 1)
+                prev_train_loss = result.value
+                _update_prev_column()
+                progress.update(training_task, advance = 1, refresh = True)
             elif result.type == 'validation loss':
-                if result.value < best_val_loss:
-                    best_val_loss = result.value
-                    progress.update(training_task)
-                    best_column.text_format = f'Best: {best_val_loss:.4f}'
+                prev_val_loss = result.value
+                _update_prev_column()
+                progress.update(training_task, advance = 0, refresh = True)
 
         best_dict, result = kirby_core.training(np_config, _callback)
         run.finish()
@@ -230,6 +245,7 @@ def main() -> int:
         sd_run.log_artifact(sd_art)
         sd_run.finish()
 
+    console.print(f'Training finished with best validation loss: {result.value:.4f}')
     return 0
 
 if __name__ == '__main__':
