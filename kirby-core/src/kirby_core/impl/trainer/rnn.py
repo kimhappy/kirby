@@ -73,7 +73,8 @@ class RNN(TrainerBase):
         # Prepare shuffle
         num_chunks     = self.tis.shape[ 0 ]
         num_chunks_cut = num_chunks - (num_chunks % self.batch_size)
-        shuffle        = (torch.randperm(num_chunks)[ : num_chunks_cut ] - 1).reshape(-1, self.batch_size)
+        random_idxs    = torch.randperm(num_chunks)[ : num_chunks_cut ] - 1
+        shuffle        = random_idxs.reshape(-1, self.batch_size)
         ep_loss        = 0
 
         for batch_idxs in shuffle:
@@ -100,6 +101,7 @@ class RNN(TrainerBase):
 
                 # Backpropagation
                 loss          .backward ()
+                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm = 1.0)
                 self.optimizer.step     ()
                 self.model    .detach   ()
                 self.optimizer.zero_grad()
@@ -115,32 +117,9 @@ class RNN(TrainerBase):
         self.model.eval()
 
         with torch.no_grad():
-            # Prepare output
-            output     = torch.empty_like(self.vos)
-            num_frames = self.vos.shape[ 0 ] // self.vali_frame
-            remainder  = self.vos.shape[ 0 ] %  self.vali_frame
             self.model.reset()
-
-            # Process frames
-            for l in range(num_frames):
-                begin                = l     * self.vali_frame
-                end                  = begin + self.vali_frame
-                input_chunk          = self.vis[ begin: end ]
-                output_chunk         = self.model(input_chunk)
-                output[ begin: end ] = output_chunk
-                self.model.detach()
-
-            # Process remainder
-            if remainder != 0:
-                begin                = num_frames * self.vali_frame
-                end                  = begin + remainder
-                input_chunk          = self.vis[ begin: end ]
-                output_chunk         = self.model(input_chunk)
-                output[ begin: end ] = output_chunk
-                self.model.detach()
-
-            # Calculate loss
-            loss = self.vali_loss(output, self.vos)
+            output = self.model(self.vis)
+            loss   = self.vali_loss(output, self.vos)
 
         self.scheduler.step(loss)
 
