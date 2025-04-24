@@ -1,16 +1,8 @@
 from typing import List
 import torch
 
-from ...protocol._config._general_config import _GeneralConfig
-from ...protocol._config._item_config    import _ItemConfig
-from ...protocol._config._data           import _Data
-from ...protocol.impl   .model_base      import ModelBase
-from ...protocol.impl   .loss_base       import LossBase
-from ...protocol.impl   .optimizer_base  import OptimizerBase
-from ...protocol.impl   .scheduler_base  import SchedulerBase
-from ...protocol.impl   .trainer_base    import TrainerBase
-from ...protocol.impl   .result          import Result
-from ..._util   ._cond                   import _merge_cond
+from ...protocol import _GeneralConfig, _ItemConfig, _Data, ModelBase, LossBase, OptimizerBase, SchedulerBase, TrainerBase, Result
+from ..._util    import _merge_cond
 
 class RNN(TrainerBase):
     def __init__(

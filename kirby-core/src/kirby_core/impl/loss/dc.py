@@ -1,7 +1,6 @@
 import torch
 
-from ...protocol._config._item_config import _ItemConfig
-from ...protocol.impl   .loss_base    import LossBase
+from ...protocol import _ItemConfig, LossBase
 
 class DC(
     LossBase,

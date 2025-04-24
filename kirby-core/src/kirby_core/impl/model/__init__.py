@@ -1,7 +1,7 @@
 from typing import Type
 
-from .  lstm                     import LSTM
-from ...protocol.impl.model_base import ModelBase
+from .  lstm     import LSTM
+from ...protocol import ModelBase
 
 _MODELS = [
     LSTM
@@ -15,4 +15,4 @@ def _find_model(name: str) -> Type[ModelBase]:
         if model.__name__ == name:
             return model
 
-    raise ValueError(f'{ name } not found')
+    raise ValueError(f'{name} not found')

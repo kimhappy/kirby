@@ -2,14 +2,12 @@ from typing import List
 from abc    import ABC, abstractmethod
 import torch
 
-from . model_base              import ModelBase
-from . loss_base               import LossBase
-from . optimizer_base          import OptimizerBase
-from . scheduler_base          import SchedulerBase
-from . result                  import Result
-from .._config._general_config import _GeneralConfig
-from .._config._item_config    import _ItemConfig
-from .._config._data           import _Data
+from . model_base     import ModelBase
+from . loss_base      import LossBase
+from . optimizer_base import OptimizerBase
+from . scheduler_base import SchedulerBase
+from . result         import Result
+from .._config        import _GeneralConfig, _ItemConfig, _Data
 
 class TrainerBase(ABC):
     @abstractmethod

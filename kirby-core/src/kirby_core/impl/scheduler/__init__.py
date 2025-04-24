@@ -1,7 +1,7 @@
 from typing import Type
 
-from .  plateau                      import Plateau
-from ...protocol.impl.scheduler_base import SchedulerBase
+from .  plateau  import Plateau
+from ...protocol import SchedulerBase
 
 _SCHEDULERS = [
     Plateau
@@ -15,4 +15,4 @@ def _find_scheduler(name: str) -> Type[SchedulerBase]:
         if scheduler.__name__ == name:
             return scheduler
 
-    raise ValueError(f'{ name } not found')
+    raise ValueError(f'{name} not found')

@@ -1,8 +1,6 @@
 import torch
 
-from ...protocol._config._item_config   import _ItemConfig
-from ...protocol.impl   .optimizer_base import OptimizerBase
-from ...protocol.impl   .scheduler_base import SchedulerBase
+from ...protocol import _ItemConfig, OptimizerBase, SchedulerBase
 
 class Plateau(
     SchedulerBase,

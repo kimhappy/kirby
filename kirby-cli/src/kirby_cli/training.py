@@ -83,9 +83,9 @@ def main() -> int:
            isinstance(value, str) and value.endswith('.wav'):
             samples = _read_mono_f32(value, sample_rate)
             id      = _power_hash(samples)
-            _write_mono_f32(f'{ id }.wav', samples, sample_rate)
-            au_art.add_file(f'{ id }.wav')
-            files_to_delete.add(f'{ id }.wav')
+            _write_mono_f32(f'{id}.wav', samples, sample_rate)
+            au_art.add_file(f'{id}.wav')
+            files_to_delete.add(f'{id}.wav')
             replaced[ value ] = id
             return id
 
@@ -95,7 +95,7 @@ def main() -> int:
     def _np_maker(key: str, value: Any) -> Optional[np.ndarray]:
         if isinstance(key  , str) and key.endswith('_audio') and \
            isinstance(value, str):
-            entry   = ad_art.get_entry(f'{ value }.wav')
+            entry   = ad_art.get_entry(f'{value}.wav')
             path    = entry.download()
             samples = _read_mono_f32(path, sample_rate)
             files_to_delete.add(path)

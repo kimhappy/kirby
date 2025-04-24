@@ -29,6 +29,6 @@ class _InheritCheck(ABCMeta):
         required_base = getattr(cls, '_required_base', None)
 
         if required_base is not None and not any(issubclass(base, required_base) for base in cls.__bases__):
-            raise TypeError(f'Classes inheriting from { cls.__name__ } must also inherit from { required_base.__name__ }')
+            raise TypeError(f'Classes inheriting from {cls.__name__} must also inherit from {required_base.__name__}')
 
         return super().__call__(*args, **kwargs)

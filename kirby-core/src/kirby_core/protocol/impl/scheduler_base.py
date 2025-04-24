@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 import torch
 
-from .  optimizer_base       import OptimizerBase
-from .. _config._item_config import _ItemConfig
-from ..._util  ._meta        import _InheritCheck
+from .  optimizer_base import OptimizerBase
+from .. _config        import _ItemConfig
+from ..._util          import _InheritCheck
 
 class SchedulerBase(
     ABC                          ,
