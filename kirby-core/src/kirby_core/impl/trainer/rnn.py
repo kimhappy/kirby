@@ -35,6 +35,7 @@ class RNN(TrainerBase):
         self.train_frame      = trainer_config.train_frame
         self.vali_frame       = trainer_config.vali_frame
         self.chunk_sec        = trainer_config.chunk_sec
+        self.grad_norm        = trainer_config.grad_norm
 
         self.chunk_len = int(self.chunk_sec * self.sample_rate)
         self.tis       = torch.empty(0, self.chunk_len, self.num_cond + 1).to(self.device)
@@ -93,7 +94,10 @@ class RNN(TrainerBase):
 
                 # Backpropagation
                 loss          .backward ()
-                torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm = 1.0)
+
+                if self.grad_norm != None:
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), max_norm = self.grad_norm)
+
                 self.optimizer.step     ()
                 self.model    .detach   ()
                 self.optimizer.zero_grad()
