@@ -1,0 +1,75 @@
+{
+  "general": {
+    "seed"       : 1009,
+    "num_cond"   : 0,
+    "sample_rate": 48000
+  },
+  "train": {
+    "max_epochs": 40,
+    "early_stop": 10,
+    "vali_cycle": 10
+  },
+  "model": {
+    "name"  : "LSTM",
+    "hidden": 40,
+    "bias"  : true
+  },
+  "trainer": {
+    "name"            : "RNN",
+    "batch_size"      : 32,
+    "train_init_frame": 200,
+    "train_frame"     : 1000,
+    "vali_frame"      : 100000,
+    "chunk_sec"       : 0.5
+  },
+  "train_loss": {
+    "name": "Mix",
+    "elems": [
+      {
+        "name" : "ESR",
+        "ratio": 0.75
+      },
+      {
+        "name" : "DC",
+        "ratio": 0.25
+      }
+    ]
+  },
+  "vali_loss": {
+    "name": "Mix",
+    "elems": [
+      {
+        "name" : "ESR",
+        "ratio": 0.75
+      },
+      {
+        "name" : "DC",
+        "ratio": 0.25
+      }
+    ]
+  },
+  "optimizer": {
+    "name"      : "Adam",
+    "initial_lr": 0.005,
+    "lr_decay"  : 0.0001
+  },
+  "scheduler": {
+    "name"       : "Plateau",
+    "lr_factor"  : 0.5,
+    "lr_patience": 5
+  },
+  "train_data": [
+    {
+      "cond"        : [],
+      "input_audio" : "data/input.wav",
+      "output_audio": "data/output.wav"
+    }
+  ],
+  "vali_data": [
+    {
+      "cond"        : [],
+      "input_audio" : "data/input.wav",
+      "output_audio": "data/output.wav"
+    }
+  ]
+}
