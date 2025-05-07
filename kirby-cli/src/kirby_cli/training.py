@@ -50,8 +50,8 @@ def main() -> int:
     atexit.register(cleanup)
 
     # Register signal handler
-    signal.signal (signal.SIGINT , signal_handler)
-    signal.signal (signal.SIGTERM, signal_handler)
+    signal.signal(signal.SIGINT , signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
 
     # Load environment variables
     load_dotenv()
