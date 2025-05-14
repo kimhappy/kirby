@@ -1,10 +1,12 @@
 from typing import Type
 
 from .  lstm     import LSTM
+from .  gru      import GRU
 from ...protocol import ModelBase
 
 _MODELS = [
-    LSTM
+    LSTM,
+    GRU
 ]
 
 def register_model(model: Type[ModelBase]) -> None:
