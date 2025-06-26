@@ -158,7 +158,7 @@ def main() -> int:
             project = project       ,
             id      = 'audio-download',
             resume  = 'allow')
-        ad_art    = ad_run.use_artifact('audio:latest')
+        ad_art    = ad_run.use_artifact('audio:v1')
         np_config = _rmap(id_config, _np_maker)
 
         if np_config is None:

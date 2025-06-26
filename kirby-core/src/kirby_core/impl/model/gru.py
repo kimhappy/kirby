@@ -22,12 +22,17 @@ class GRU(
         self.hidden = None
 
     def forward(self, x):
+        x = x.contiguous()
         rec_out, self.hidden = self.rec(x, self.hidden)
-        lin_out              = self.lin(rec_out)
-        return x[ ..., 0 ] + lin_out[ ..., 0 ]
+        lin_out = self.lin(rec_out)
+    
+        base = x[..., 0].contiguous()
+        delta = lin_out[..., 0].contiguous()
+        return base + delta
 
     def detach(self):
-        self.hidden = self.hidden.clone().detach()
+        if self.hidden is not None:
+            self.hidden = self.hidden.detach()
 
     def reset(self):
         self.hidden = None

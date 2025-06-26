@@ -108,14 +108,19 @@ class RNN(TrainerBase):
             ep_loss  += batch_loss / num_iter
 
         return Result('training loss', (ep_loss / shuffle.shape[ 0 ]).item())
-
+        
     def validate(self) -> Result:
         self.model.eval()
-
         with torch.no_grad():
             self.model.reset()
-            output = self.model(self.vis)
-            loss   = self.vali_loss(output, self.vos)
+
+        # ✅ 너무 큰 validation 데이터를 자르기 (예: 16000 샘플까지만)
+            max_seq_len = 16000
+            vis = self.vis[:max_seq_len, :].to(self.model.lin.weight.device).float().unsqueeze(0).contiguous()
+            vos = self.vos[:max_seq_len].to(self.model.lin.weight.device).float()
+
+            output = self.model(vis)
+            loss = self.vali_loss(output, vos)
 
         self.scheduler.step(loss)
 
